@@ -2,9 +2,9 @@ import streamlit as st
 import pandas as pd
 import xml.etree.ElementTree as ET
 import tempfile
-import locale
+#import locale
 
-locale.setlocale(locale.LC_TIME, 'es_ES.UTF-8')
+#locale.setlocale(locale.LC_TIME, 'es_ES.UTF-8')
 
 st.title("Generador de XML de Oficinas")
 
