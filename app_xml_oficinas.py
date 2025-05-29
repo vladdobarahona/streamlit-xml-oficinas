@@ -35,7 +35,7 @@ if oficinas_file:
             ET.SubElement(sucursal, "{http://www.finagro.com.co/sit}sit:nombre").text = row['NOMBRE DE LA OFICINA']
             ET.SubElement(sucursal, "{http://www.finagro.com.co/sit}sit:codigoDepartamento").text = row['CODIGO_DEPARTAMENTO_ORIGINAL']
             ET.SubElement(sucursal, "{http://www.finagro.com.co/sit}sit:codigoMunicipio").text = row['CODIGO_DPTO_MPIO']
-            ET.SubElement(sucursal, "{http://www.finagro.com.co/sit}sit:direccion").text = "R\n" + row['DIRECCION DE LA OFICINA ']
+            ET.SubElement(sucursal, "{http://www.finagro.com.co/sit}sit:direccion").text = "R|" + row['DIRECCION DE LA OFICINA ']
             ET.SubElement(sucursal, "{http://www.finagro.com.co/sit}sit:numeroTelefonoFijo",
                           extension='', prefijoCiudad=row['PREFIJO TELEFONICO DEL MUNICIPIO ']).text = row['NUMERO TELEFONICO DE LA OFICINA 1 ']
             ET.SubElement(sucursal, "{http://www.finagro.com.co/sit}sit:numeroTelefonoFax", prefijoCiudad="").text = " "
