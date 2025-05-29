@@ -2,22 +2,18 @@ import streamlit as st
 import pandas as pd
 import xml.etree.ElementTree as ET
 import tempfile
-#import locale
-
-#locale.setlocale(locale.LC_TIME, 'es_ES.UTF-8')
 
 st.title("Generador de XML de Oficinas")
 
-# Subida de archivos
-oficinas_file = st.file_uploader("Sube el archivo de oficinas (Excel)", type=["xlsx"])
-#divipola_file = st.file_uploader("Sube el archivo DIVIPOLA (Excel)", type=["xlsx"])
+# Cargar archivo DIVIPOLA fijo desde el repositorio
 divipola = pd.read_excel("divipola.xlsx", sheet_name='Sheet1', engine="openpyxl", dtype=str)
 
+# Subida del archivo de oficinas
+oficinas_file = st.file_uploader("Sube el archivo de oficinas (Excel)", type=["xlsx"])
 
 if oficinas_file:
     if st.button("Generar XML"):
         oficinas = pd.read_excel(oficinas_file, sheet_name='Hoja1', engine="openpyxl", dtype=str)
-        divipola = pd.read_excel(divipola_file, sheet_name='Sheet1', engine="openpyxl", dtype=str)
 
         oficinas['CODIGO_DEPARTAMENTO'] = oficinas['CODIGO DEL DEPARTAMENTO '].astype('int')
         oficinas['CODIGO_MUNICIPIO'] = oficinas['CODIGO DEL MUNICIPIO '].astype('int')
