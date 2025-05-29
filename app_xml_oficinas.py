@@ -11,10 +11,10 @@ st.title("Generador de XML de Oficinas")
 # Subida de archivos
 oficinas_file = st.file_uploader("Sube el archivo de oficinas (Excel)", type=["xlsx"])
 #divipola_file = st.file_uploader("Sube el archivo DIVIPOLA (Excel)", type=["xlsx"])
-divipola_file = pd.read_excel("divipola.xlsx", sheet_name='Sheet1', engine="openpyxl", dtype=str)
+divipola = pd.read_excel("divipola.xlsx", sheet_name='Sheet1', engine="openpyxl", dtype=str)
 
 
-if oficinas_file and divipola_file:
+if oficinas_file:
     if st.button("Generar XML"):
         oficinas = pd.read_excel(oficinas_file, sheet_name='Hoja1', engine="openpyxl", dtype=str)
         divipola = pd.read_excel(divipola_file, sheet_name='Sheet1', engine="openpyxl", dtype=str)
