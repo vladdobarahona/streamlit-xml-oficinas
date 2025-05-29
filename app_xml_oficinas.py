@@ -3,7 +3,7 @@ import pandas as pd
 import xml.etree.ElementTree as ET
 import tempfile
 
-st.title("Generador de XML de Oficinas")
+st.title("Generador de XML de Oficinas a partir de un archivo Excel")
 
 # Cargar archivo DIVIPOLA fijo desde el repositorio
 divipola = pd.read_excel("divipola.xlsx", sheet_name='Sheet1', engine="openpyxl", dtype=str)
