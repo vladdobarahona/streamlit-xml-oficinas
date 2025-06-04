@@ -3,7 +3,27 @@ import pandas as pd
 import xml.etree.ElementTree as ET
 import tempfile
 
-st.title("Generador de XML de Oficinas a partir de un archivo Excel")
+# Fondo personalizado y fuente
+st.markdown("""
+<style>
+    body {
+        background-color: #abbe4c;
+        font-family: 'Handel Gothic', 'Frutiger light - Roman';
+    }
+    .stApp {
+        background-color: #abbe4c;
+        font-family: 'Frutiger Bold', sans-serif;
+    }
+</style>
+    """, unsafe_allow_html=True)
+ 
+# Logo a la izquierda y título a la derecha
+col1, col2 = st.columns([1, 3])
+with col1:
+    st.image('https://www.finagro.com.co/sites/default/files/logo-front-finagro.png', width=200)
+with col2:
+    st.title("Generador de XML de Oficinas a partir de un archivo Excel")
+
 
 # Cargar archivo DIVIPOLA fijo desde el repositorio
 divipola = pd.read_excel("divipola.xlsx", sheet_name='Sheet1', engine="openpyxl", dtype=str)
