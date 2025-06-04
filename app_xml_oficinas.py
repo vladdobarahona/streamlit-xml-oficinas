@@ -27,6 +27,9 @@ with col2:
         unsafe_allow_html=True
     )
 
+# Cargar archivo DIVIPOLA fijo desde el repositorio
+divipola = pd.read_excel("divipola.xlsx", sheet_name='Sheet1', engine="openpyxl", dtype=str)
+
 # Subida del archivo de oficinas
 ##oficinas_file = st.file_uploader("Sube el archivo de oficinas (Excel)", type=["xlsx"])
 st.markdown(
