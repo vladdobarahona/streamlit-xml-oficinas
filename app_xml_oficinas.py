@@ -7,7 +7,7 @@ import tempfile
 st.markdown("""
 <style>
     body {
-        background-color: rgb(190, 214, 138);
+        background-color: rgb(255, 255, 255);
         font-family: 'Handel Gothic', 'Frutiger light - Roman';
     }
     .stApp {
@@ -22,7 +22,10 @@ col1, col2 = st.columns([1, 2])
 with col1:
     st.image('https://www.finagro.com.co/sites/default/files/logo-front-finagro.png', width=200)
 with col2:
-    st.title("Generador de XML de Oficinas a partir de un archivo Excel")
+    st.markdown(
+        '<h1 style="color: rgb(120,154,61); font-size: 2.25rem; font-weight: bold;">Generador de XML de Oficinas a partir de un archivo Excel</h1>',
+        unsafe_allow_html=True
+    )
 
 
 # Cargar archivo DIVIPOLA fijo desde el repositorio
@@ -31,7 +34,7 @@ divipola = pd.read_excel("divipola.xlsx", sheet_name='Sheet1', engine="openpyxl"
 # Subida del archivo de oficinas
 ##oficinas_file = st.file_uploader("Sube el archivo de oficinas (Excel)", type=["xlsx"])
 st.markdown(
-    '<span style="color: rgb(11, 94, 94); font-size: 22px;">Sube el archivo de oficinas (Excel)</span>',
+    '<span style="color: rgb(120, 154, 61); font-size: 22px;">Sube el archivo de oficinas (Excel)</span>',
     unsafe_allow_html=True
 )
 oficinas_file = st.file_uploader("", type=["xlsx"])
