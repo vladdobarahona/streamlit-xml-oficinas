@@ -18,7 +18,7 @@ st.markdown("""
     """, unsafe_allow_html=True)
  
 # Logo a la izquierda y título a la derecha
-col1, col2 = st.columns([1, 2])
+col1, col2 = st.columns([2, 2])
 with col1:
     st.image('https://www.finagro.com.co/sites/default/files/logo-front-finagro.png', width=200)
 with col2:
