@@ -29,7 +29,12 @@ with col2:
 divipola = pd.read_excel("divipola.xlsx", sheet_name='Sheet1', engine="openpyxl", dtype=str)
 
 # Subida del archivo de oficinas
-oficinas_file = st.file_uploader("Sube el archivo de oficinas (Excel)", type=["xlsx"])
+##oficinas_file = st.file_uploader("Sube el archivo de oficinas (Excel)", type=["xlsx"])
+st.markdown(
+    '<span style="color: rgb(245, 155, 29); font-size: 22px;">Sube el archivo de oficinas (Excel)</span>',
+    unsafe_allow_html=True
+)
+oficinas_file = st.file_uploader("", type=["xlsx"])
 
 if oficinas_file:
     if st.button("Generar XML"):
