@@ -7,11 +7,11 @@ import tempfile
 st.markdown("""
 <style>
     body {
-        background-color: rgb(255, 255, 255);
+        background-color: #abbe4c;
         font-family: 'Handel Gothic', 'Frutiger light - Roman';
     }
     .stApp {
-        background-color: #abbe4c;
+        background-color: rgb(255, 255, 255);
         font-family: 'Frutiger Bold', sans-serif;
     }
 </style>
