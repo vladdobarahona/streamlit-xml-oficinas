@@ -7,7 +7,7 @@ import tempfile
 st.markdown("""
 <style>
     body {
-        background-color: #abbe4c;
+        background-color: rgb(190, 214, 138);
         font-family: 'Handel Gothic', 'Frutiger light - Roman';
     }
     .stApp {
@@ -31,7 +31,7 @@ divipola = pd.read_excel("divipola.xlsx", sheet_name='Sheet1', engine="openpyxl"
 # Subida del archivo de oficinas
 ##oficinas_file = st.file_uploader("Sube el archivo de oficinas (Excel)", type=["xlsx"])
 st.markdown(
-    '<span style="color: rgb(245, 155, 29); font-size: 22px;">Sube el archivo de oficinas (Excel)</span>',
+    '<span style="color: rgb(11, 94, 94); font-size: 22px;">Sube el archivo de oficinas (Excel)</span>',
     unsafe_allow_html=True
 )
 oficinas_file = st.file_uploader("", type=["xlsx"])
