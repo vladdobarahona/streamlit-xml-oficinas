@@ -40,8 +40,8 @@ oficinas_file = st.file_uploader("", type=["xlsx"])
 
 if oficinas_file:
     if st.button("Generar XML"):
-        oficinas = pd.read_excel(oficinas_file, sheet_name='Hoja1', engine="openpyxl", dtype=str)
-
+        #oficinas = pd.read_excel(oficinas_file, sheet_name='Hoja1', engine="openpyxl", dtype=str)
+        oficinas = pd.read_excel(oficinas_file, engine="openpyxl", dtype=str)
         oficinas['CODIGO_DEPARTAMENTO'] = oficinas['CODIGO DEL DEPARTAMENTO '].astype('int')
         oficinas['CODIGO_MUNICIPIO'] = oficinas['CODIGO DEL MUNICIPIO '].astype('int')
         divipola['CODIGO_DEPARTAMENTO_ORIGINAL'] = divipola['CODIGO_DEPARTAMENTO']
@@ -52,25 +52,74 @@ if oficinas_file:
         oficinas = pd.merge(oficinas, divipola, how='left', on=['CODIGO_DEPARTAMENTO', 'CODIGO_MUNICIPIO'])
         cantidad_oficinas = str(len(oficinas))
 
-        ET.register_namespace('', "http://www.finagro.com.co/sit")
-        sucursales = ET.Element("{http://www.finagro.com.co/sit}sit:sucursales", cifraDeControl=cantidad_oficinas)
+        #ET.register_namespace('', "http://www.finagro.com.co/sit")
+        ET.register_namespace('sit', "http://www.finagro.com.co/sit")
+        ET.register_namespace('xsi', "http://www.w3.org/2001/XMLSchema-instance")
+        root_attributes = {
+                            "cifraDeControl": str(Cantidad_oficinas),
+                            # El atributo xsi:schemaLocation debe incluir su URI de espacio de nombres completo
+                            # para que ElementTree lo maneje correctamente como un atributo calificado.
+                            "{http://www.w3.org/2001/XMLSchema-instance}schemaLocation": "http://www.finagro.com.co/sit sucursales.xsd "
+                        }
+        #sucursales = ET.Element("{http://www.finagro.com.co/sit}sit:sucursales", cifraDeControl=cantidad_oficinas)
+        sucursales = ET.Element("{http://www.finagro.com.co/sit}sucursales", **root_attributes)
+
 
         for _, row in oficinas.iterrows():
             sucursal = ET.SubElement(sucursales, "{http://www.finagro.com.co/sit}sit:sucursal")
-            ET.SubElement(sucursal, "{http://www.finagro.com.co/sit}sit:codigoIntermediario").text = "101054"
-            ET.SubElement(sucursal, "{http://www.finagro.com.co/sit}sit:codigoIdentificacionSucursal").text = row['CODIGO DE LA OFICINA']
-            ET.SubElement(sucursal, "{http://www.finagro.com.co/sit}sit:nombre").text = row['NOMBRE DE LA OFICINA']
-            ET.SubElement(sucursal, "{http://www.finagro.com.co/sit}sit:codigoDepartamento").text = row['CODIGO_DEPARTAMENTO_ORIGINAL']
-            ET.SubElement(sucursal, "{http://www.finagro.com.co/sit}sit:codigoMunicipio").text = row['CODIGO_DPTO_MPIO']
-            ET.SubElement(sucursal, "{http://www.finagro.com.co/sit}sit:direccion").text = "R|" + row['DIRECCION DE LA OFICINA ']
-            ET.SubElement(sucursal, "{http://www.finagro.com.co/sit}sit:numeroTelefonoFijo",
-                          extension='', prefijoCiudad=row['PREFIJO TELEFONICO DEL MUNICIPIO ']).text = row['NUMERO TELEFONICO DE LA OFICINA 1 ']
-            ET.SubElement(sucursal, "{http://www.finagro.com.co/sit}sit:numeroTelefonoFax", prefijoCiudad="").text = " "
-            ET.SubElement(sucursal, "{http://www.finagro.com.co/sit}sit:correoElectronico").text = "info@coomeva.com"
-            ET.SubElement(sucursal, "{http://www.finagro.com.co/sit}sit:nombreGerente").text = row['NOMBRE DEL GERENTE']
+            ET.SubElement(sucursal, "{http://www.finagro.com.co/sit}sit:codigoIntermediario").text = str(row.get('CODIGO DEL INTERMEDIARIO FINANCIERO', '')).strip()
+            ET.SubElement(sucursal, "{http://www.finagro.com.co/sit}codigoIdentificacionSucursal").text = str(row.get('CODIGO DE LA OFICINA', '')).strip()
+            ET.SubElement(sucursal, "{http://www.finagro.com.co/sit}nombre").text = str(row.get('NOMBRE DE LA OFICINA', '')).strip()
+            ET.SubElement(sucursal, "{http://www.finagro.com.co/sit}codigoDepartamento").text = str(row.get('CODIGO_DEPARTAMENTO_ORIGINAL', '')).strip()
+            ET.SubElement(sucursal, "{http://www.finagro.com.co/sit}codigoMunicipio").text = str(row.get('CODIGO_DPTO_MPIO', '')).strip()
+            ET.SubElement(sucursal, "{http://www.finagro.com.co/sit}direccion").text = str(row.get('DIRECCION DE LA OFICINA ', '')).strip()
+            
+            # Crear numeroTelefonoFijo con sus atributos
+            numeroTelefonoFijo = ET.SubElement(
+                sucursal,
+                "{http://www.finagro.com.co/sit}numeroTelefonoFijo",
+                extension='',
+                prefijoCiudad=str(row.get('PREFIJO TELEFONICO DEL MUNICIPIO ', '')).strip()
+            )
+            numeroTelefonoFijo.text = str(row.get('NUMERO TELEFONICO DE LA OFICINA 1 ', '')).strip()
+        
+            # Crear numeroTelefonoFax con sus atributos.
+            # Establecer el texto como una cadena vacía para que coincida con la salida deseada (sin espacio).
+            numeroTelefonoFax = ET.SubElement(
+                sucursal,
+                "{http://www.finagro.com.co/sit}numeroTelefonoFax",
+                prefijoCiudad=""
+            )
+            numeroTelefonoFax.text = "" # Esto asegura una etiqueta vacía, no una etiqueta con un espacio
+        
+            ET.SubElement(sucursal, "{http://www.finagro.com.co/sit}correoElectronico").text = str("info@coomeva.com").strip()
+            ET.SubElement(sucursal, "{http://www.finagro.com.co/sit}nombreGerente").text = re.sub(r"\(\s*[Ee]?\s*\)", "", str(row.get('NOMBRE DEL GERENTE', ''))).strip()
+                                    		
+        # Crear el árbol XML
+        def sanitize_element_debug(element, log=[]):
+            if element.text is not None and not isinstance(element.text, str):
+                log.append(f"[Texto no válido] Elemento: <{element.tag}> - Valor: {element.text} - Tipo: {type(element.text)}")
+                element.text = str(element.text)
+            for key, value in element.attrib.items():
+                if not isinstance(value, str):
+                    log.append(f"[Atributo no válido] Elemento: <{element.tag}> - Atributo: {key} - Valor: {value} - Tipo: {type(value)}")
+                    element.attrib[key] = str(value)
+            for child in element:
+                sanitize_element_debug(child, log)
+            return log
+        
+        
+        log = sanitize_element_debug(sucursales)
+        if log:
+            print("🔍 Valores corregidos en el XML")
+            for entry in log:
+                print(entry)
+        else:
+            print("✅ Todos los valores del XML ya eran válidos.")
+
 
         tree = ET.ElementTree(sucursales)
-        ET.indent(tree, space=" ", level=0)
+        ET.indent(tree, space="  ", level=0)
 
         with tempfile.NamedTemporaryFile(delete=False, suffix=".xml") as tmp:
             tree.write(tmp.name, encoding="UTF-8", xml_declaration=True)
