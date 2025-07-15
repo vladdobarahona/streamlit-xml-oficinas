@@ -3,6 +3,7 @@ import pandas as pd
 import xml.etree.ElementTree as ET
 import tempfile
 import re
+from io import BytesIO
 
 # Fondo personalizado y fuente
 st.markdown("""
@@ -17,7 +18,29 @@ st.markdown("""
     }
 </style>
     """, unsafe_allow_html=True)
- 
+
+# Cargar el archivo Excel desde el archivo local
+df = pd.read_excel("oficinas.xlsx",  engine="openpyxl", dtype=str)
+
+# Convertir el DataFrame a un archivo Excel en memoria
+def to_excel(df):
+    output = BytesIO()
+    with pd.ExcelWriter(output, engine='openpyxl') as writer:
+        df.to_excel(writer, index=False, sheet_name='Oficinas')
+    output.seek(0)
+    return output
+
+excel_file = to_excel(df)
+
+# Botón de descarga directo
+st.download_button(
+    label="Descargar plantilla Excel",
+    data=excel_file,
+    file_name="plantilla_creación_oficinas.xlsx",
+    mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    icon=":material/download:"
+)
+st.divider()
 # Logo a la izquierda y título a la derecha
 col1, col2 = st.columns([1, 2])
 with col1:
