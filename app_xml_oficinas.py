@@ -74,7 +74,7 @@ if oficinas_file:
         divipola['CODIGO_MUNICIPIO'] = divipola['CODIGO_MUNICIPIO'].astype('int')
 
         oficinas = pd.merge(oficinas, divipola, how='left', on=['CODIGO_DEPARTAMENTO', 'CODIGO_MUNICIPIO'])
-        cantidad_oficinas = str(len(oficinas))
+        Cantidad_oficinas = str(len(oficinas))
 
         #ET.register_namespace('', "http://www.finagro.com.co/sit")
         ET.register_namespace('sit', "http://www.finagro.com.co/sit")
