@@ -90,8 +90,8 @@ if oficinas_file:
 
 
         for _, row in oficinas.iterrows():
-            sucursal = ET.SubElement(sucursales, "{http://www.finagro.com.co/sit}sit:sucursal")
-            ET.SubElement(sucursal, "{http://www.finagro.com.co/sit}sit:codigoIntermediario").text = str(row.get('CODIGO DEL INTERMEDIARIO FINANCIERO', '')).strip()
+            sucursal = ET.SubElement(sucursales, "{http://www.finagro.com.co/sit}sucursal")
+            ET.SubElement(sucursal, "{http://www.finagro.com.co/sit}codigoIntermediario").text = str(row.get('CODIGO DEL INTERMEDIARIO FINANCIERO', '')).strip()
             ET.SubElement(sucursal, "{http://www.finagro.com.co/sit}codigoIdentificacionSucursal").text = str(row.get('CODIGO DE LA OFICINA', '')).strip()
             ET.SubElement(sucursal, "{http://www.finagro.com.co/sit}nombre").text = str(row.get('NOMBRE DE LA OFICINA', '')).strip()
             ET.SubElement(sucursal, "{http://www.finagro.com.co/sit}codigoDepartamento").text = str(row.get('CODIGO_DEPARTAMENTO_ORIGINAL', '')).strip()
